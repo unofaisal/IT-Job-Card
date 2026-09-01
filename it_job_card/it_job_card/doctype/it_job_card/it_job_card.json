@@ -10,9 +10,9 @@
   "visit_date",
   "is_weekly",
   "column_break_bjhm",
+  "status",
   "start_time",
   "end_time",
-  "status",
   "section_break_vcdn",
   "division",
   "schedule_reference",
@@ -63,18 +63,19 @@
   },
   {
    "fieldname": "division",
-   "fieldtype": "Select",
-   "label": "Division"
+   "fieldtype": "Link",
+   "label": "Division",
+   "options": "Apex Division"
   },
   {
    "fieldname": "section_break_ogrj",
    "fieldtype": "Section Break"
   },
   {
-   "depends_on": "eval:doc.status == \"Requires Revisit\"",
+   "depends_on": "eval:doc.status == \"Requires Revisit\" || doc.status == \"In Progress\"",
    "fieldname": "reason",
    "fieldtype": "Small Text",
-   "label": "Reason"
+   "label": "Revisit Reason"
   },
   {
    "fieldname": "section_break_eair",
@@ -120,7 +121,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-31 12:05:55.237916",
+ "modified": "2026-09-01 11:22:19.863326",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "IT Job Card",

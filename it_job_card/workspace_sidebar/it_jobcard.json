@@ -1,0 +1,28 @@
+{
+ "app": "it_job_card",
+ "creation": "2026-09-01 12:27:12.602230",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "goal",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "IT JobCard",
+   "link_to": "IT JobCard",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-01 12:36:59.964976",
+ "modified_by": "Administrator",
+ "module": "It Job Card",
+ "name": "IT JobCard",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "IT JobCard"
+}

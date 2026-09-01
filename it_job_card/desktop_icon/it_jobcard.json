@@ -1,0 +1,20 @@
+{
+ "app": "it_job_card",
+ "bg_color": "gray",
+ "creation": "2026-09-01 12:27:12.609564",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "Link",
+ "idx": 0,
+ "label": "IT JobCard",
+ "link_to": "IT JobCard",
+ "link_type": "Workspace Sidebar",
+ "modified": "2026-09-01 12:41:28.663032",
+ "modified_by": "Administrator",
+ "name": "IT JobCard",
+ "owner": "Administrator",
+ "restrict_removal": 0,
+ "roles": [],
+ "standard": 1
+}

@@ -1,0 +1,38 @@
+{
+ "app": "it_job_card",
+ "charts": [],
+ "content": "[{\"id\":\"Dqu2vGIolW\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the IT JobCard workspace</span>\",\"col\":12}},{\"id\":\"Bvh-y4UX_8\",\"type\":\"paragraph\",\"data\":{\"text\":\"Click on \\n\\t\\t\\t\\n\\t\\t\\t\\n\\t\\t to edit\",\"col\":12}},{\"id\":\"KFVMHlrrGd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IT Job Card\",\"col\":3}}]",
+ "creation": "2026-09-01 12:27:12.585865",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "IT JobCard",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-09-01 12:29:53.504192",
+ "modified_by": "Administrator",
+ "module": "It Job Card",
+ "name": "IT JobCard",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "IT JobCard",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "IT Job Card",
+   "type": "URL",
+   "url": "/job-card"
+  }
+ ],
+ "title": "IT JobCard",
+ "type": "Workspace"
+}

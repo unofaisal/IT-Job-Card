@@ -1,6 +1,9 @@
 # Copyright (c) 2026, one and contributors
 # For license information, please see license.txt
 
+# Copyright (c) 2026, one and contributors
+# For license information, please see license.txt
+
 import frappe
 from frappe.model.document import Document
 from frappe.utils import nowtime, nowdate
@@ -12,17 +15,25 @@ class ITJobCard(Document):
 		# so this is what actually sets it. Desk users can still override.
 		if not self.visitor:
 			self.visitor = frappe.session.user
-		if not self.visit_date:
-			self.visit_date = nowdate()
-		# Users never fill this in directly — captured the moment the card is created
-		if not self.start_time:
-			self.start_time = nowtime()
+		
+		# start_time is NOT set here — it's tied to the "Start Visit" workflow
+		# action (status becoming "In Progress"), see validate() below. Setting
+		# it on creation meant it fired on Save regardless of whether anyone
+		# ever clicked the button, which is misleading.
 
 	def validate(self):
 		# Fires on every save, including workflow-driven status changes.
-		# Only sets end_time once — won't overwrite it on later edits.
+		# Only sets each timestamp once — won't overwrite it on later edits.		
+		if self.status == "In Progress" and not self.start_time:
+			if not self.visit_date:
+				self.visit_date = nowdate()
+			self.start_time = nowtime()
 		if self.status == "Completed" and not self.end_time:
 			self.end_time = nowtime()
+
+		before = self.get_doc_before_save()
+		if before and before.status == "Completed" and "System Manager" not in frappe.get_roles():
+			frappe.throw("This job card is completed and can no longer be edited.")
 
 import frappe
 from frappe.utils import getdate, add_days, today, nowdate
