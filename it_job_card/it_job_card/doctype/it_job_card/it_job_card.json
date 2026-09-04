@@ -2,6 +2,7 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
+ "autoname": "IT-JC-{MM}-{DD}-{#####}",
  "creation": "2026-08-29 09:06:20.061283",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -121,10 +122,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-01 11:22:19.863326",
+ "modified": "2026-09-04 15:31:23.873379",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "IT Job Card",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
