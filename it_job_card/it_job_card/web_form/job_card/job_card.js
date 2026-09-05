@@ -1,4 +1,17 @@
 frappe.ready(function() {
+     try {
+    if (frappe.web_form && typeof frappe.web_form.set_query === "function") {
+        frappe.web_form.set_query("visitor", function () {
+            return {
+                query: "it_job_card.it_job_card.web_form.job_card.job_card.get_it_team_users",
+            };
+        });
+    } else {
+        console.warn("frappe.web_form.set_query not available on this version — visitor field will show all users.");
+    }
+    } catch (e) {
+        console.warn("Could not set visitor query filter:", e);
+    }
     render_workflow_actions();
 });
 

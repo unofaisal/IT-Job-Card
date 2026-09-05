@@ -6,7 +6,7 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import nowtime, nowdate
+from frappe.utils import nowtime, nowdate, getdate, add_days, today
 
 
 class ITJobCard(Document):
@@ -30,13 +30,34 @@ class ITJobCard(Document):
 			self.start_time = nowtime()
 		if self.status == "Completed" and not self.end_time:
 			self.end_time = nowtime()
+			self._just_completed = True
 
 		before = self.get_doc_before_save()
 		if before and before.status == "Completed" and "System Manager" not in frappe.get_roles():
 			frappe.throw("This job card is completed and can no longer be edited.")
 
-import frappe
-from frappe.utils import getdate, add_days, today, nowdate
+	def on_update(self):
+		if getattr(self, "_just_completed", False):
+			self.send_completion_email()
+
+	def send_completion_email(self): 
+		frappe.sendmail(
+			recipients=["s.darji@apex-steel.com"],
+			subject=f"IT Job Card Completed — {self.division or ''} ({self.name})",
+			message=f"""
+				<p>Hello Shailesh,</p>
+				<p>The IT job card for <b>{self.division or '-'}</b> has been
+				<b>Completed</b>.</p>
+				<p>
+					Visitor: {self.visitor or '-'}<br>
+					Visit Date: {self.visit_date or '-'}<br>
+					Job Description: {self.job_description or '-'}
+				</p>
+			""",
+			reference_doctype=self.doctype,
+			reference_name=self.name,
+		)
+
 
 WEEKDAY_MAP = {
 	0: "Monday", 1: "Tuesday", 2: "Wednesday",
