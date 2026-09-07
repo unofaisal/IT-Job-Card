@@ -1,0 +1,38 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-31 15:28:51.086190",
+  "name": "Open",
+  "style": "Primary",
+  "workflow_state_name": "Open"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-31 15:28:51.483397",
+  "name": "Requires Revisit",
+  "style": "Danger",
+  "workflow_state_name": "Requires Revisit"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-31 15:28:51.480981",
+  "name": "In Progress",
+  "style": "Warning",
+  "workflow_state_name": "In Progress"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-31 15:28:51.487582",
+  "name": "Completed",
+  "style": "Success",
+  "workflow_state_name": "Completed"
+ }
+]

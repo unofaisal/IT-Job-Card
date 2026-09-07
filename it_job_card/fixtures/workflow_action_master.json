@@ -1,0 +1,37 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-31 15:28:51.490641",
+  "name": "Start Visit",
+  "workflow_action_name": "Start Visit"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-31 15:28:51.496916",
+  "name": "Mark Completed",
+  "workflow_action_name": "Mark Completed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-31 15:28:51.498318",
+  "name": "Flag Revisit Needed",
+  "workflow_action_name": "Flag Revisit Needed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-31 15:28:51.499695",
+  "name": "Resolve",
+  "workflow_action_name": "Resolve"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-31 15:28:51.500933",
+  "name": "Reopen",
+  "workflow_action_name": "Reopen"
+ }
+]

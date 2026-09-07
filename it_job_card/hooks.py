@@ -256,8 +256,25 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
-scheduler_events = {
-    "daily": [
-        "it_job_card.tasks.send_visit_reminders"
-    ]
-}
+
+
+fixtures = [
+	{"doctype": "Role", "filters": [["name", "=", "IT Team"]]},
+	{
+		"doctype": "Workflow State",
+		"filters": [["name", "in", ["Open", "In Progress", "Requires Revisit", "Completed"]]],
+	},
+	{
+		"doctype": "Workflow Action Master",
+		"filters": [
+			["name", "in", ["Start Visit", "Mark Completed", "Flag Revisit Needed", "Resolve", "Reopen"]]
+		],
+	},
+	{"doctype": "Workflow", "filters": [["name", "=", "IT Job Card Workflow"]]},
+]
+
+# scheduler_events = {
+#     "daily": [
+#         "it_job_card.it_job_card.doctype.it_job_card.it_job_card.send_visit_reminders"
+#     ]
+# }

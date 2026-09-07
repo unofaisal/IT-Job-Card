@@ -1,0 +1,131 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow",
+  "document_type": "IT Job Card",
+  "enable_action_confirmation": 0,
+  "is_active": 1,
+  "modified": "2026-09-01 09:22:30.574222",
+  "name": "IT Job Card Workflow",
+  "override_status": 0,
+  "send_email_alert": 0,
+  "states": [
+   {
+    "allow_edit": "IT Team",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "evaluate_as_expression": 0,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "send_email": 1,
+    "state": "Open",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "IT Team",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "evaluate_as_expression": 0,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "send_email": 1,
+    "state": "In Progress",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "IT Team",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "evaluate_as_expression": 0,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "send_email": 1,
+    "state": "Requires Revisit",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "IT Team",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "evaluate_as_expression": 0,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "send_email": 1,
+    "state": "Completed",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   }
+  ],
+  "transitions": [
+   {
+    "action": "Start Visit",
+    "allow_self_approval": 1,
+    "allowed": "IT Team",
+    "condition": null,
+    "next_state": "In Progress",
+    "send_email_to_creator": 0,
+    "state": "Open",
+    "transition_tasks": null,
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Mark Completed",
+    "allow_self_approval": 1,
+    "allowed": "IT Team",
+    "condition": "doc.supervisor_incharge and doc.sign",
+    "next_state": "Completed",
+    "send_email_to_creator": 0,
+    "state": "In Progress",
+    "transition_tasks": null,
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Flag Revisit Needed",
+    "allow_self_approval": 1,
+    "allowed": "IT Team",
+    "condition": "doc.reason",
+    "next_state": "Requires Revisit",
+    "send_email_to_creator": 0,
+    "state": "In Progress",
+    "transition_tasks": null,
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Resolve",
+    "allow_self_approval": 1,
+    "allowed": "IT Team",
+    "condition": "doc.supervisor_incharge and doc.sign",
+    "next_state": "Completed",
+    "send_email_to_creator": 0,
+    "state": "Requires Revisit",
+    "transition_tasks": null,
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Reopen",
+    "allow_self_approval": 1,
+    "allowed": "IT Team",
+    "condition": null,
+    "next_state": "Open",
+    "send_email_to_creator": 0,
+    "state": "Requires Revisit",
+    "transition_tasks": null,
+    "workflow_builder_id": null
+   }
+  ],
+  "workflow_data": null,
+  "workflow_name": "IT Job Card Workflow",
+  "workflow_state_field": "status"
+ }
+]
