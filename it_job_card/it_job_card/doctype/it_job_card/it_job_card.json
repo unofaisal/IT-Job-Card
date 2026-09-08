@@ -21,6 +21,7 @@
   "job_description",
   "section_break_eair",
   "supervisor_incharge",
+  "supervisor_email",
   "column_break_aiwn",
   "sign",
   "section_break_ogrj",
@@ -92,9 +93,10 @@
   },
   {
    "fieldname": "supervisor_incharge",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Supervisor Incharge"
+   "label": "Supervisor Incharge",
+   "options": "Apex Supervisor"
   },
   {
    "fieldname": "sign",
@@ -128,12 +130,19 @@
   {
    "fieldname": "column_break_aiwn",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "supervisor_incharge.email",
+   "fieldname": "supervisor_email",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Supervisor Email"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-07 08:06:07.600461",
+ "modified": "2026-09-08 11:47:03.558304",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "IT Job Card",
@@ -149,6 +158,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "IT Team",
    "share": 1,
    "write": 1
   }

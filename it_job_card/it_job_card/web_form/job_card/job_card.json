@@ -22,7 +22,7 @@
  "list_title": "My Job Cards",
  "login_required": 1,
  "max_attachment_size": 0,
- "modified": "2026-09-05 10:16:37.058659",
+ "modified": "2026-09-08 08:37:47.080127",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "job-card",
@@ -154,7 +154,7 @@
    "show_in_filter": 0
   },
   {
-   "allow_read_on_all_link_options": 0,
+   "allow_read_on_all_link_options": 1,
    "depends_on": "eval:doc.is_weekly == 1",
    "fieldname": "schedule_reference",
    "fieldtype": "Link",
@@ -206,13 +206,14 @@
    "show_in_filter": 0
   },
   {
-   "allow_read_on_all_link_options": 0,
+   "allow_read_on_all_link_options": 1,
    "fieldname": "supervisor_incharge",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "hidden": 0,
    "label": "Supervisor Incharge",
    "max_length": 0,
    "max_value": 0,
+   "options": "Apex Supervisor",
    "precision": "",
    "read_only": 0,
    "reqd": 0,
