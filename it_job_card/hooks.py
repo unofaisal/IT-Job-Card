@@ -256,7 +256,14 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
-
+add_to_apps_screen = [
+    {
+        "name": "it_job_card",
+        "title": "IT Job Card",
+        # "logo": "/assets/it_job_card/images/logo.png",  # optional
+        "route": "/app/it-job-card",
+    }
+]
 
 fixtures = [
 	{"doctype": "Role", "filters": [["name", "=", "IT Team"]]},
