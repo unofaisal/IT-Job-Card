@@ -1,20 +1,24 @@
-{
- "app": "it_job_card",
- "bg_color": "gray",
- "creation": "2026-09-01 12:27:12.609564",
- "docstatus": 0,
- "doctype": "Desktop Icon",
- "hidden": 0,
- "icon_type": "Link",
- "idx": 0,
- "label": "IT JobCard",
- "link_to": "IT JobCard",
- "link_type": "Workspace Sidebar",
- "modified": "2026-09-08 12:07:40.982427",
- "modified_by": "Administrator",
- "name": "IT JobCard",
- "owner": "Administrator",
- "restrict_removal": 0,
- "roles": [],
- "standard": 1
-}
+[
+ {
+  "app": "it_job_card",
+  "bg_color": "gray",
+  "docstatus": 0,
+  "doctype": "Desktop Icon",
+  "hidden": 0,
+  "icon": null,
+  "icon_image": null,
+  "icon_type": "Link",
+  "label": "It Job Card",
+  "link": null,
+  "link_to": "It Job Card",
+  "link_type": "Workspace Sidebar",
+  "logo_url": null,
+  "modified": "2026-09-08 12:32:44.962972",
+  "name": "IT JobCard",
+  "parent_icon": null,
+  "restrict_removal": 0,
+  "roles": [],
+  "sidebar": null,
+  "standard": 1
+ }
+]
