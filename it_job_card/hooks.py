@@ -260,7 +260,7 @@ add_to_apps_screen = [
     {
         "name": "it_job_card",
         "title": "IT Job Card",
-        "logo": "",  # optional
+        "logo": "",
         "route": "/app/it-job-card",
     }
 ]
