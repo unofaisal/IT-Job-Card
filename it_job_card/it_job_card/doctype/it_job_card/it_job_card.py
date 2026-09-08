@@ -40,23 +40,116 @@ class ITJobCard(Document):
 		if getattr(self, "_just_completed", False):
 			self.send_completion_email()
 
-	def send_completion_email(self): 
-		frappe.sendmail(
-			recipients=["s.darji@apex-steel.com"],
-			subject=f"IT Job Card Completed — {self.division or ''} ({self.name})",
-			message=f"""
-				<p>Hello Shailesh,</p>
-				<p>The IT job card for <b>{self.division or '-'}</b> has been
-				<b>Completed</b>.</p>
-				<p>
-					Visitor: {self.visitor or '-'}<br>
-					Visit Date: {self.visit_date or '-'}<br>
-					Job Description: {self.job_description or '-'}
-				</p>
-			""",
+	def has_webform_permission(self):
+		"""Web form route permission — checked by
+		WebForm.has_web_form_permission() AFTER the owner check.
+		Frappe admins may open any Job Card; everyone else is owner-only."""
+		return frappe.session.user == "Administrator" or "System Manager" in frappe.get_roles()
+
+	def send_completion_email(self):
+		admin_emails = ["f.imali@apex-steel.com"]
+
+		cc = []
+		if self.supervisor_email:
+			cc = [self.supervisor_email]
+			admin_emails = [e for e in admin_emails if e != self.supervisor_email]
+
+		if not admin_emails:
+			return
+
+		kwargs = dict(
+			recipients=admin_emails,
+			cc=cc,
+			subject=f"IT Job Card Completed — {self.division or 'Visit'} ({self.name})",
+			message=self.get_completion_email_html(),
+			with_container=True,  # branded card: logo/name, styled container, standard footer
 			reference_doctype=self.doctype,
 			reference_name=self.name,
 		)
+
+		# 2026 redesigned wrapper (rounded auth-email card) — only used when
+		# the build has it; older builds fall back to standard.html
+		try:
+			from frappe.utils.jinja import get_template
+
+			get_template("templates/emails/auth_email.html")
+			kwargs["wrapper"] = "templates/emails/auth_email.html"
+		except Exception:
+			pass
+
+		frappe.sendmail(**kwargs)
+
+	def get_it_admin_emails(self):
+		role = frappe.db.get_single_value("IT Job Card Settings", "it_role")
+		if not role:
+			return []
+
+		user_names = set(
+			frappe.get_all("Has Role", filters={"parenttype": "User", "role": role}, pluck="parent")
+		)
+		if not user_names:
+			return []
+
+		users = frappe.get_all(
+			"User", filters={"name": ("in", list(user_names)), "enabled": 1}, fields=["email", "name"]
+		)
+		return [u.email or u.name for u in users]
+
+	def get_completion_email_html(self):
+		from frappe.utils import escape_html, format_date, get_time
+
+		def e(v):
+			return escape_html(v) if v else "-"
+
+		# HTML collapses whitespace, so newlines must become <br> to survive
+		# in email. Escape FIRST so any typed < > & stays harmless.
+		def e_multiline(v):
+			if not v:
+				return "-"
+			return (
+				escape_html(v)
+				.replace("\r\n", "\n")
+				.replace("\r", "\n")
+				.replace("\n", "<br>")
+			)
+
+		# Time fields arrive either as "10:30:00" strings or timedelta
+		# objects from the DB — get_time() normalizes both.
+		def fmt_time(v):
+			return get_time(v).strftime("%I:%M %p") if v else "-"
+
+		visit_date = format_date(self.visit_date) if self.visit_date else "-"
+		visitor_name = frappe.db.get_value("User", self.visitor, "full_name") or self.visitor or "-"
+
+		card_url = f"{frappe.utils.get_url()}/job-card/{self.name}"
+
+		description_html = ""
+		if self.job_description:
+			description_html = f"""
+			<p><b>Job Description</b></p>
+			<div class="gray-container">{e_multiline(self.job_description)}</div>"""
+
+		# All classes below are Frappe's own email classes (email.bundle.css);
+		# they are inlined into the message automatically at send time.
+		return f"""
+		<h1 class="email-title" style="font-size:20px;font-weight:600;line-height:1.4;color:#171717;margin:0 0 16px;">Job Card Completed</h1>
+		<div class="email-body">
+			<p>The IT visit to <b>{e(self.division)}</b> on <b>{visit_date}</b> has been marked completed and signed off.</p>
+
+			<table class="table table-bordered">
+				<tr><td style="width:130px;"><b>Division</b></td><td>{e(self.division)}</td></tr>
+				<tr><td><b>Visit Date</b></td><td>{visit_date}</td></tr>
+				<tr><td><b>Visitor</b></td><td>{e(visitor_name)}</td></tr>
+				<tr><td><b>Start Time</b></td><td>{fmt_time(self.start_time)}</td></tr>
+				<tr><td><b>End Time</b></td><td>{fmt_time(self.end_time)}</td></tr>
+			</table>
+			{description_html}
+			<div class="email-action">
+				<a class="email-btn email-btn-primary btn btn-primary" href="{card_url}">View Job Card</a>
+			</div>
+		</div>
+		"""
+
 
 
 WEEKDAY_MAP = {

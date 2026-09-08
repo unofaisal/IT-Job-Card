@@ -1,0 +1,24 @@
+[
+ {
+  "app": "it_job_card",
+  "bg_color": "gray",
+  "docstatus": 0,
+  "doctype": "Desktop Icon",
+  "hidden": 0,
+  "icon": null,
+  "icon_image": null,
+  "icon_type": "Link",
+  "label": "It Job Card",
+  "link": null,
+  "link_to": "It Job Card",
+  "link_type": "Workspace Sidebar",
+  "logo_url": null,
+  "modified": "2026-09-08 12:32:44.962972",
+  "name": "IT JobCard",
+  "parent_icon": null,
+  "restrict_removal": 0,
+  "roles": [],
+  "sidebar": null,
+  "standard": 1
+ }
+]

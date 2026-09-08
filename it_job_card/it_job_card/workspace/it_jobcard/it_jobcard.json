@@ -1,7 +1,7 @@
 {
  "app": "it_job_card",
  "charts": [],
- "content": "[{\"id\":\"Dqu2vGIolW\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the IT JobCard workspace</span>\",\"col\":12}},{\"id\":\"Bvh-y4UX_8\",\"type\":\"paragraph\",\"data\":{\"text\":\"Click on \\n\\t\\t\\t\\n\\t\\t\\t\\n\\t\\t to edit\",\"col\":12}},{\"id\":\"KFVMHlrrGd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IT Job Card\",\"col\":3}}]",
+ "content": "[{\"id\":\"Bvh-y4UX_8\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>IT Job Card</b>\",\"col\":12}},{\"id\":\"KFVMHlrrGd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IT Job Card\",\"col\":3}}]",
  "creation": "2026-09-01 12:27:12.585865",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "label": "IT JobCard",
  "link_type": "DocType",
  "links": [],
- "modified": "2026-09-01 12:29:53.504192",
+ "modified": "2026-09-08 12:38:01.837917",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "IT JobCard",
