@@ -47,7 +47,11 @@ class ITJobCard(Document):
 		return frappe.session.user == "Administrator" or "System Manager" in frappe.get_roles()
 
 	def send_completion_email(self):
-		admin_emails = ["f.imali@apex-steel.com"]
+		send_mail = frappe.db.get_single_value("IT Job Card Settings", "it_role")
+
+		if not send_mail:
+			return
+		admin_emails = ["s.darji@apex-steel.com"]
 
 		cc = []
 		if self.supervisor_email:
