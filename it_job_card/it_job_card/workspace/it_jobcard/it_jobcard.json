@@ -1,7 +1,7 @@
 {
  "app": "it_job_card",
  "charts": [],
- "content": "[{\"id\":\"Bvh-y4UX_8\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>IT Job Card</b>\",\"col\":12}},{\"id\":\"KFVMHlrrGd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IT Job Card\",\"col\":3}}]",
+ "content": "[{\"id\":\"Bvh-y4UX_8\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>IT Job Card</b>\",\"col\":12}},{\"id\":\"KFVMHlrrGd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IT Job Card\",\"col\":3}},{\"id\":\"h9c8weExTK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Division Supervisor\",\"col\":3}}]",
  "creation": "2026-09-01 12:27:12.585865",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "label": "IT JobCard",
  "link_type": "DocType",
  "links": [],
- "modified": "2026-09-08 12:38:01.837917",
+ "modified": "2026-09-09 17:56:38.981076",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "IT JobCard",
@@ -31,6 +31,14 @@
    "label": "IT Job Card",
    "type": "URL",
    "url": "/job-card"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Division Supervisor",
+   "link_to": "Apex Supervisor",
+   "stats_filter": "[]",
+   "type": "DocType"
   }
  ],
  "title": "IT JobCard",
