@@ -15,7 +15,7 @@ class ITJobCard(Document):
 		# so this is what actually sets it. Desk users can still override.
 		if not self.visitor:
 			self.visitor = frappe.session.user
-		
+
 		# start_time is NOT set here — it's tied to the "Start Visit" workflow
 		# action (status becoming "In Progress"), see validate() below. Setting
 		# it on creation meant it fired on Save regardless of whether anyone
@@ -23,7 +23,7 @@ class ITJobCard(Document):
 
 	def validate(self):
 		# Fires on every save, including workflow-driven status changes.
-		# Only sets each timestamp once — won't overwrite it on later edits.		
+		# Only sets each timestamp once — won't overwrite it on later edits.
 		if self.status == "In Progress" and not self.start_time:
 			if not self.visit_date:
 				self.visit_date = nowdate()
@@ -47,22 +47,26 @@ class ITJobCard(Document):
 		return frappe.session.user == "Administrator" or "System Manager" in frappe.get_roles()
 
 	def send_completion_email(self):
-		send_mail = frappe.db.get_single_value("IT Job Card Settings", "it_role")
+		settings = frappe.get_single("IT Job Card Settings")
 
-		if not send_mail:
+		if not settings.send_completion:
 			return
-		admin_emails = ["s.darji@apex-steel.com"]
+
+		to_emails = get_configured_recipients(settings, "notify_completion")
 
 		cc = []
-		if self.supervisor_email:
+		if settings.notify_supervisor and self.supervisor_email and self.supervisor_email not in to_emails:
 			cc = [self.supervisor_email]
-			admin_emails = [e for e in admin_emails if e != self.supervisor_email]
 
-		if not admin_emails:
+		if not to_emails and not cc:
 			return
+		if not to_emails:
+			# Nobody in the recipients table, only a supervisor to CC — send
+			# to them directly rather than silently dropping the mail.
+			to_emails, cc = cc, []
 
 		kwargs = dict(
-			recipients=admin_emails,
+			recipients=to_emails,
 			cc=cc,
 			subject=f"IT Job Card Completed — {self.division or 'Visit'} ({self.name})",
 			message=self.get_completion_email_html(),
@@ -82,22 +86,6 @@ class ITJobCard(Document):
 			pass
 
 		frappe.sendmail(**kwargs)
-
-	def get_it_admin_emails(self):
-		role = frappe.db.get_single_value("IT Job Card Settings", "it_role")
-		if not role:
-			return []
-
-		user_names = set(
-			frappe.get_all("Has Role", filters={"parenttype": "User", "role": role}, pluck="parent")
-		)
-		if not user_names:
-			return []
-
-		users = frappe.get_all(
-			"User", filters={"name": ("in", list(user_names)), "enabled": 1}, fields=["email", "name"]
-		)
-		return [u.email or u.name for u in users]
 
 	def get_completion_email_html(self):
 		from frappe.utils import escape_html, format_date, get_time
@@ -155,6 +143,30 @@ class ITJobCard(Document):
 		"""
 
 
+def get_configured_recipients(settings, notify_field):
+	"""Build a deduped email list from the Recipients child table (rows with
+	the given notify_field checked) plus everyone holding settings.it_role,
+	if set. notify_field is "notify_completion" or "notify_reminder"."""
+	emails = {row.recipient_email for row in settings.recipients if row.get(notify_field) and row.recipient_email}
+
+	if settings.it_role:
+		emails.update(get_role_emails(settings.it_role))
+
+	return sorted(emails)
+
+
+def get_role_emails(role):
+	user_names = set(
+		frappe.get_all("Has Role", filters={"parenttype": "User", "role": role}, pluck="parent")
+	)
+	if not user_names:
+		return []
+
+	users = frappe.get_all(
+		"User", filters={"name": ("in", list(user_names)), "enabled": 1}, fields=["email", "name"]
+	)
+	return [u.email or u.name for u in users]
+
 
 WEEKDAY_MAP = {
 	0: "Monday", 1: "Tuesday", 2: "Wednesday",
@@ -168,36 +180,22 @@ def send_visit_reminders():
 	if not settings.send_reminder:
 		return
 
-	if not settings.it_team_role:
-		frappe.log_error("IT Job Card Settings: send_reminder is on but no it_team_role is set")
-		return
+	base_recipients = get_configured_recipients(settings, "notify_reminder")
 
-	team_emails = frappe.get_all(
-		"Has Role",
-		filters={"role": settings.it_team_role, "parenttype": "User"},
-		pluck="parent",
-	)
-	if not team_emails:
-		return
+	# NOTE: settings has no reminder_time field — Frappe's "daily" scheduler
+	# event runs on its own internal tick (usually shortly after midnight),
+	# not at an arbitrary configured clock time. To honor a specific time,
+	# register this under "cron" in hooks.py instead, e.g.:
+	#   "cron": {"0 8 * * *": ["it_job_card.tasks.send_visit_reminders"]}
 
 	lead_days = settings.send_reminder_ondays_before or 0
 	target_date = add_days(getdate(), lead_days)
 	target_weekday = WEEKDAY_MAP[target_date.weekday()]
 
-	# NOTE: settings.reminder_time controls when the scheduler *should* fire,
-	# but Frappe's "daily" scheduler event runs on its own internal tick
-	# (usually once shortly after midnight), not at an arbitrary configured
-	# clock time. To actually honor reminder_time, register this under
-	# "all" or "cron" in hooks.py instead, e.g.:
-	#   "cron": {"0 8 * * *": ["it_job_card.tasks.send_visit_reminders"]}
-	# and read settings.reminder_time only if you want the cron string
-	# itself to be admin-editable (more work — a fixed cron entry is
-	# simpler if 8am is fine to hardcode).
-
 	schedules = frappe.get_all(
 		"IT Visit Schedule",
 		filters={"active": 1, "weekday": target_weekday},
-		fields=["name", "division", "frequency", "last_reminded_on"],
+		fields=["name", "division", "frequency", "last_reminded_on", "owner"],
 	)
 
 	for sched in schedules:
@@ -209,8 +207,19 @@ def send_visit_reminders():
 		# against the last completed IT Job Card for this schedule_reference
 		# rather than a naive date-diff, since visits can slip.
 
+		recipients = list(base_recipients)
+
+		# Always include whoever created this schedule, even if they're not
+		# in the configured recipients list.
+		creator_email = frappe.db.get_value("User", sched.owner, "email") or sched.owner
+		if creator_email and creator_email not in recipients and creator_email != "Administrator":
+			recipients.append(creator_email)
+
+		if not recipients:
+			continue
+
 		frappe.sendmail(
-			recipients=team_emails,
+			recipients=recipients,
 			subject=f"Upcoming IT visit needed — {sched.division} on {target_date.strftime('%A, %d %b')}",
 			message=f"""
 				<p>A planned IT visit to <b>{sched.division}</b> is due on

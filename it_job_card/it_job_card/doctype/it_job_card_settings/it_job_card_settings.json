@@ -2,58 +2,80 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "creation": "2026-08-29 09:40:23.675836",
+ "creation": "2026-09-11 12:40:15.053631",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "send_reminder",
   "send_completion",
-  "weekly_visit_day",
-  "column_break_aqtt",
+  "notify_supervisor",
+  "it_role",
+  "column_break_jjnk",
   "send_reminder_ondays_before",
-  "it_role"
+  "weekly_visit_day",
+  "email_recipients_section",
+  "table_hqgc"
  ],
  "fields": [
   {
    "default": "0",
    "fieldname": "send_reminder",
    "fieldtype": "Check",
-   "label": "Send Reminder"
-  },
-  {
-   "fieldname": "weekly_visit_day",
-   "fieldtype": "Select",
-   "label": "Weekly visit Day",
-   "options": "Monday\nTuesday\nWednesday\nThursday\nFriday"
-  },
-  {
-   "default": "1",
-   "fieldname": "send_reminder_ondays_before",
-   "fieldtype": "Int",
-   "label": "Send Reminder On(Days Before)"
-  },
-  {
-   "fieldname": "it_role",
-   "fieldtype": "Link",
-   "label": "IT Role",
-   "options": "Role"
-  },
-  {
-   "fieldname": "column_break_aqtt",
-   "fieldtype": "Column Break"
+   "label": "Send Reminder Mail"
   },
   {
    "default": "0",
    "fieldname": "send_completion",
    "fieldtype": "Check",
-   "label": "Send Completion"
+   "label": "Send Completion Mail"
+  },
+  {
+   "default": "0",
+   "fieldname": "notify_supervisor",
+   "fieldtype": "Check",
+   "label": "Notify Supervisor"
+  },
+  {
+   "default": "IT Team",
+   "fieldname": "it_role",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "IT Role",
+   "options": "Role"
+  },
+  {
+   "fieldname": "column_break_jjnk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.send_reminder",
+   "fieldname": "send_reminder_ondays_before",
+   "fieldtype": "Int",
+   "label": "Send Reminder On(Days Before)"
+  },
+  {
+   "depends_on": "eval:doc.send_reminder",
+   "fieldname": "weekly_visit_day",
+   "fieldtype": "Select",
+   "label": "Weekly Visit Day"
+  },
+  {
+   "depends_on": "eval:doc.send_reminder || doc.send_completion",
+   "fieldname": "email_recipients_section",
+   "fieldtype": "Section Break",
+   "label": "Email Recipients"
+  },
+  {
+   "fieldname": "table_hqgc",
+   "fieldtype": "Table",
+   "options": "IT Job Card Recipient"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-09-09 08:33:47.285272",
+ "modified": "2026-09-11 12:48:30.227038",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "IT Job Card Settings",
