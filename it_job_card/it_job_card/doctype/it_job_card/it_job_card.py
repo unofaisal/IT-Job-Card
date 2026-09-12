@@ -93,8 +93,7 @@ class ITJobCard(Document):
 		def e(v):
 			return escape_html(v) if v else "-"
 
-		# HTML collapses whitespace, so newlines must become <br> to survive
-		# in email. Escape FIRST so any typed < > & stays harmless.
+		# Task text is Small Text — preserve newlines within a task
 		def e_multiline(v):
 			if not v:
 				return "-"
@@ -105,8 +104,6 @@ class ITJobCard(Document):
 				.replace("\n", "<br>")
 			)
 
-		# Time fields arrive either as "10:30:00" strings or timedelta
-		# objects from the DB — get_time() normalizes both.
 		def fmt_time(v):
 			return get_time(v).strftime("%I:%M %p") if v else "-"
 
@@ -115,14 +112,23 @@ class ITJobCard(Document):
 
 		card_url = f"{frappe.utils.get_url()}/job-card/{self.name}"
 
-		description_html = ""
-		if self.job_description:
-			description_html = f"""
-			<p><b>Job Description</b></p>
-			<div class="gray-container">{e_multiline(self.job_description)}</div>"""
+		tasks_html = ""
+		if self.tasks:
+			task_rows = ""
+			for d in self.tasks:
+				user_display = (
+					frappe.db.get_value("User", d.user, "full_name") or d.user
+				) if d.user else "-"
+				task_rows += f"""
+				<tr><td>{e_multiline(d.task)}</td><td style="width:200px;">{e(user_display)}</td></tr>"""
 
-		# All classes below are Frappe's own email classes (email.bundle.css);
-		# they are inlined into the message automatically at send time.
+			tasks_html = f"""
+			<p><b>Tasks Completed ({len(self.tasks)})</b></p>
+			<table class="table table-bordered">
+				<tr><td><b>Task</b></td><td style="width:200px;"><b>For</b></td></tr>
+				{task_rows}
+			</table>"""
+
 		return f"""
 		<h1 class="email-title" style="font-size:20px;font-weight:600;line-height:1.4;color:#171717;margin:0 0 16px;">Job Card Completed</h1>
 		<div class="email-body">
@@ -135,7 +141,7 @@ class ITJobCard(Document):
 				<tr><td><b>Start Time</b></td><td>{fmt_time(self.start_time)}</td></tr>
 				<tr><td><b>End Time</b></td><td>{fmt_time(self.end_time)}</td></tr>
 			</table>
-			{description_html}
+			{tasks_html}
 			<div class="email-action">
 				<a class="email-btn email-btn-primary btn btn-primary" href="{card_url}">View Job Card</a>
 			</div>

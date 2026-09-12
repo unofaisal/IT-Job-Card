@@ -9,17 +9,16 @@
  "field_order": [
   "visitor",
   "visit_date",
-  "is_weekly",
+  "job_type",
   "column_break_bjhm",
   "status",
   "start_time",
   "end_time",
-  "section_break_vcdn",
-  "division",
-  "schedule_reference",
-  "column_break_hjga",
-  "job_description",
+  "tasks_section",
+  "tasks",
   "section_break_eair",
+  "schedule_reference",
+  "division",
   "supervisor_incharge",
   "supervisor_email",
   "column_break_aiwn",
@@ -44,12 +43,6 @@
    "read_only": 1
   },
   {
-   "default": "0",
-   "fieldname": "is_weekly",
-   "fieldtype": "Check",
-   "label": "Is Weekly"
-  },
-  {
    "fieldname": "column_break_bjhm",
    "fieldtype": "Column Break"
   },
@@ -64,10 +57,6 @@
    "fieldtype": "Time",
    "label": "End Time",
    "read_only": 1
-  },
-  {
-   "fieldname": "section_break_vcdn",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "division",
@@ -119,15 +108,6 @@
    "options": "IT Visit Schedule"
   },
   {
-   "fieldname": "job_description",
-   "fieldtype": "Small Text",
-   "label": "Job Description"
-  },
-  {
-   "fieldname": "column_break_hjga",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "column_break_aiwn",
    "fieldtype": "Column Break"
   },
@@ -137,12 +117,29 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Supervisor Email"
+  },
+  {
+   "fieldname": "job_type",
+   "fieldtype": "Select",
+   "label": "Job Type",
+   "options": "Weekly\nAnnual"
+  },
+  {
+   "fieldname": "tasks_section",
+   "fieldtype": "Section Break",
+   "label": "Tasks"
+  },
+  {
+   "fieldname": "tasks",
+   "fieldtype": "Table",
+   "label": "Tasks",
+   "options": "IT Job Card Task"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-08 11:47:03.558304",
+ "modified": "2026-09-12 11:53:03.313518",
  "modified_by": "Administrator",
  "module": "It Job Card",
  "name": "IT Job Card",
