@@ -3,7 +3,7 @@
 
 # Copyright (c) 2026, one and contributors
 # For license information, please see license.txt
-
+import json
 import frappe
 from frappe.model.document import Document
 from frappe.utils import nowtime, nowdate, getdate, add_days, today
@@ -240,3 +240,62 @@ def send_visit_reminders():
 		frappe.db.set_value("IT Visit Schedule", sched.name, "last_reminded_on", getdate())
 
 	frappe.db.commit()
+
+@frappe.whitelist()
+def get_it_team_users(doctype=None, txt="", searchfield=None, start=0, page_len=20, filters=None):
+	role = frappe.db.get_single_value("IT Job Card Settings", "it_role")
+	if not role:
+		return []
+
+	start = frappe.utils.cint(start)
+	page_len = frappe.utils.cint(page_len) or 20
+
+	rows = frappe.db.sql(
+		"""
+		SELECT u.name, u.full_name
+		FROM `tabUser` u
+		INNER JOIN `tabHas Role` hr
+			ON hr.parent = u.name AND hr.parenttype = 'User'
+		WHERE hr.role = %(role)s
+			AND u.enabled = 1
+			AND (u.name LIKE %(txt)s OR u.full_name LIKE %(txt)s)
+		ORDER BY u.full_name
+		LIMIT %(page_len)s OFFSET %(start)s
+		""",
+		{"role": role, "txt": f"%{txt or ''}%", "start": start, "page_len": page_len},
+	)
+	return rows  # already tuples: (name, full_name)
+
+
+@frappe.whitelist()
+def get_division_supervisors(
+	doctype=None, txt="", searchfield=None, start=0, page_len=20, filters=None, **kwargs
+):
+	if isinstance(filters, str):
+		try:
+			filters = json.loads(filters)
+		except (TypeError, ValueError):
+			filters = None
+
+	division = kwargs.get("division") or (filters or {}).get("division")
+	if not division:
+		division = frappe.cache().hget("it_job_card:division", frappe.session.user)
+
+	if not division:
+		return []
+
+	start = frappe.utils.cint(start)
+	page_len = frappe.utils.cint(page_len) or 20
+
+	rows = frappe.db.sql(
+		"""
+		SELECT name, full_name
+		FROM `tabApex Supervisor`
+		WHERE division = %(division)s
+			AND (name LIKE %(txt)s OR full_name LIKE %(txt)s)
+		ORDER BY full_name
+		LIMIT %(page_len)s OFFSET %(start)s
+		""",
+		{"division": division, "txt": f"%{txt or ''}%", "start": start, "page_len": page_len},
+	)
+	return rows  # already tuples: (name, full_name)
