@@ -278,8 +278,8 @@ fixtures = [
 		],
 	},
 	{"doctype": "Workflow", "filters": [["name", "=", "IT Job Card Workflow"]]},
-    {"doctype": "Desktop Icon", "filters": [["name", "=", "IT JobCard"]]},
-       {"dt": "Workspace", "filters": [["module", "=", "It Job Card"]]}
+    # {"doctype": "Desktop Icon", "filters": [["name", "=", "IT JobCard"]]},
+    #    {"dt": "Workspace", "filters": [["module", "=", "It Job Card"]]}
 ]
 
 # scheduler_events = {
